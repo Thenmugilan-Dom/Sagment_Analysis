@@ -4,16 +4,19 @@ from textblob import TextBlob
 from googleapiclient.discovery import build
 import os
 
-# Replace with your actual API key
+# Replace with your actual YouTube API key
 YOUTUBE_API_KEY = "AIzaSyCbrA2Bo8uQTpUzhUI42Drh8nvz0fr6YH0"
 
+# Initialize the Flask app
 app = Flask(__name__, static_folder="../frontend", static_url_path="/")
 CORS(app)
 
+# Route for serving the frontend (index.html)
 @app.route("/")
 def index():
     return send_from_directory(app.static_folder, "index.html")
 
+# Route for analyzing text sentiment
 @app.route("/analyze", methods=["POST"])
 def analyze():
     data = request.get_json()
@@ -21,6 +24,7 @@ def analyze():
     sentiment = analyze_sentiment(text)
     return jsonify({"sentiment": sentiment})
 
+# Route for analyzing YouTube comments sentiment
 @app.route("/analyze_youtube", methods=["POST"])
 def analyze_youtube():
     data = request.get_json()
@@ -61,6 +65,7 @@ def analyze_youtube():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+# Route for uploading a file and analyzing its contents sentiment
 @app.route("/upload_file", methods=["POST"])
 def upload_file():
     file = request.files["file"]
@@ -73,6 +78,7 @@ def upload_file():
 
     return jsonify({"comments": comments})
 
+# Function to analyze the sentiment of the given text
 def analyze_sentiment(text):
     blob = TextBlob(text)
     polarity = blob.sentiment.polarity
@@ -83,5 +89,6 @@ def analyze_sentiment(text):
     else:
         return "Neutral"
 
+# Run the Flask app
 if __name__ == "__main__":
     app.run(debug=True)
