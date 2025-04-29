@@ -1,0 +1,42 @@
+Enter a comment to analyze, 'youtube' to analyze YouTube video comments, or 'exit' to quit: EXIT
+PS C:\Users\DELL\Downloads\code-tamilmixsentiment> python Tamil_ML.py
+[nltk_data] Downloading package punkt to
+[nltk_data]     C:\Users\DELL\AppData\Roaming\nltk_data...
+[nltk_data]   Package punkt is already up-to-date!
+[nltk_data] Downloading package stopwords to
+[nltk_data]     C:\Users\DELL\AppData\Roaming\nltk_data...
+[nltk_data]   Package stopwords is already up-to-date!
+[nltk_data] Downloading package wordnet to
+[nltk_data]     C:\Users\DELL\AppData\Roaming\nltk_data...
+[nltk_data]   Package wordnet is already up-to-date!
+100%|██████████████████████████████████████████████████████████████████████████| 15744/15744 [00:00<00:00, 44387.57it/s]
+100%|███████████████████████████████████████████████████████████████████████████| 15744/15744 [00:01<00:00, 8515.97it/s] 
+100%|███████████████████████████████████████████████████████████████████████████| 15744/15744 [00:06<00:00, 2469.59it/s] 
+100%|███████████████████████████████████████████████████████████████████████████| 15744/15744 [00:03<00:00, 4391.61it/s] 
+Vectorizing...: 100%|█████████████████████████████████████████████████████████| 15744/15744 [00:00<00:00, 850507.74it/s] 
+
+Enter a comment to analyze, 'youtube' to analyze YouTube video comments, or 'exit' to quit: Ethana padam vanthanu SALT AND PEPPER Mattum than..THÃLÃ🤩🤩
+Sentiment: Positive 
+
+Enter a comment to analyze, 'youtube' to analyze YouTube video comments, or 'exit' to quit: youtube                      
+Enter YouTube video URL: https://www.youtube.com/watch?v=BAOdoV7jQVo&list=RDGMEMCMFH2exzjBeE_zAHHJOdxgVMBAOdoV7jQVo&start_radio=1
+
+🔍 Analyzing YouTube comments...
+
+✅ Total Comments Analyzed: 30
+
+📊 Sentiment Distribution:
+{'Positive ': 21, 'Negative ': 5, 'Mixed feelings ': 2, 'not-Tamil ': 1, 'unknown state ': 1}
+
+📈 Confusion Matrix:
+[[ 2  0  0  0  0]
+ [ 0  5  0  0  0]
+ [ 0  0 21  0  0]
+ [ 0  0  0  1  0]
+ [ 0  0  0  0  1]]
+
+🎯 Accuracy: 1.0000
+
+Enter a comment to analyze, 'youtube' to analyze YouTube video comments, or 'exit' to quit:  ❤❤❤❤🫂🫂🫂🫂🫂🫂
+Sentiment: Positive 
+

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tamil & Thanglish Sentiment Analyzer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #e0c3fc, #8ec5fc);
+      color: #333;
+      padding: 3rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      transition: background 0.3s ease, color 0.3s ease;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .dark-mode body {
+      background: #121212;
+      color: #f1f1f1;
+    }
+
+    h1 {
+      font-size: 3rem;
+      color: #fff;
+      margin-bottom: 2rem;
+      text-align: center;
+      text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+      transition: color 0.3s ease;
+    }
+
+    .dark-mode h1 {
+      color: #ff4081;
+    }
+
+    .section {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      width: 100%;
+      max-width: 800px;
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      transition: transform 0.3s ease-in-out, box-shadow 0.3s ease, background 0.3s;
+    }
+
+    .dark-mode .section {
+      background: rgba(35, 35, 35, 0.9);
+    }
+
+    .section:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      color: #6a1b9a;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.3s ease;
+    }
+
+    .dark-mode h2 {
+      color: #d500f9;
+    }
+
+    input[type="text"],
+    input[type="file"],
+    textarea {
+      width: 100%;
+      padding: 1rem;
+      margin-top: 1rem;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      background-color: #f1f1f1;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+
+    .dark-mode input[type="text"],
+    .dark-mode input[type="file"],
+    .dark-mode textarea {
+      background-color: #333;
+      color: #fff;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px #ba68c8;
+    }
+
+    button {
+      margin-top: 1.5rem;
+      padding: 1rem 2.5rem;
+      background: linear-gradient(to right, #8e24aa, #d81b60);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.3s, background 0.3s;
+    }
+
+    button:hover {
+      background: linear-gradient(to right, #6a1b9a, #c2185b);
+      transform: scale(1.1);
+    }
+
+    .dark-mode button {
+      background: linear-gradient(to right, #d500f9, #ab47bc);
+    }
+
+    #sentimentResult {
+      margin-top: 1rem;
+      font-weight: bold;
+      font-size: 1.3rem;
+      background: #e8f5e9;
+      color: #2e7d32;
+      padding: 1rem;
+      border-left: 6px solid #66bb6a;
+      border-radius: 8px;
+      animation: slideIn 0.5s ease-in-out;
+    }
+
+    .dark-mode #sentimentResult {
+      background: #303030;
+      color: #80e27e;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    #loadingIndicator {
+      display: none;
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #ff6f00;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 1rem;
+    }
+
+    li {
+      background: #fff3f8;
+      border-left: 5px solid #ec407a;
+      padding: 1.2rem;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: background 0.3s;
+    }
+
+    li:hover {
+      background: #fce4ec;
+    }
+
+    .dark-mode li {
+      background: #2c2c2c;
+      border-left: 5px solid #ff4081;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2.2rem;
+      }
+
+      .section {
+        padding: 1.8rem;
+      }
+    }
+
+    /* Fixed position for the toggle button on the left side */
+    .mode-toggle {
+      position: fixed;
+      left: 20px;
+      top: 20px;
+      padding: 1rem;
+      background-color: #fff;
+      border: 2px solid #8e24aa;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.5rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s ease;
+    }
+
+    .mode-toggle:hover {
+      background-color: #f1f1f1;
+    }
+
+    .dark-mode .mode-toggle {
+      background-color: #333;
+      border-color: #d500f9;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <button class="mode-toggle" onclick="toggleDarkMode()">🌙 / 🌞</button>
+
+  <h1>🌟 Tamil & Thanglish Sentiment Analyzer</h1>
+
+  <div class="section">
+    <h2>📝 Analyze a Comment</h2>
+    <input type="text" id="commentInput" placeholder="Type a Tamil or Thanglish comment..." />
+    <button onclick="analyzeSentiment()">Analyze Sentiment</button>
+    <div id="loadingIndicator">Analyzing...</div>
+    <p id="sentimentResult"></p>
+  </div>
+
+  <div class="section">
+    <h2>📺 Analyze YouTube Comments</h2>
+    <input type="text" id="youtubeURL" placeholder="Paste YouTube video URL here..." />
+    <button onclick="analyzeYouTube()">Analyze YouTube Comments</button>
+    <ul id="youtubeCommentsList"></ul>
+  </div>
+
+  <div class="section">
+    <h2>📂 Upload File for Analysis</h2>
+    <input type="file" id="fileUpload" />
+    <button onclick="uploadFile()">Upload & Analyze</button>
+    <ul id="fileCommentsList"></ul>
+  </div>
+
+  <script>
+    let darkMode = false;
+
+    // Toggle between dark and light modes
+    function toggleDarkMode() {
+      darkMode = !darkMode;
+      document.body.classList.toggle('dark-mode', darkMode);
+    }
+
+    // Function to analyze sentiment for a text input
+    async function analyzeSentiment() {
+      document.getElementById('loadingIndicator').style.display = 'block';
+      const comment = document.getElementById('commentInput').value;
+      const response = await fetch('/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: comment })
+      });
+      const data = await response.json();
+      document.getElementById('sentimentResult').textContent = `Sentiment: ${data.sentiment}`;
+      document.getElementById('loadingIndicator').style.display = 'none';
+    }
+
+    // Function to analyze sentiment for YouTube comments from the provided URL
+    async function analyzeYouTube() {
+      const videoURL = document.getElementById('youtubeURL').value;
+      const response = await fetch('/analyze_youtube', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: videoURL })
+      });
+
+      const data = await response.json();
+      const commentsList = document.getElementById('youtubeCommentsList');
+      commentsList.innerHTML = '';
+      data.comments.forEach(comment => {
+        const li = document.createElement('li');
+        li.textContent = `${comment.text}: ${comment.sentiment}`;
+        commentsList.appendChild(li);
+      });
+    }
+
+    // Function to upload a file and analyze sentiment for the comments within
+    async function uploadFile() {
+      const file = document.getElementById('fileUpload').files[0];
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await fetch('/upload_file', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await response.json();
+      const commentsList = document.getElementById('fileCommentsList');
+      commentsList.innerHTML = '';
+      data.comments.forEach(comment => {
+        const li = document.createElement('li');
+        li.textContent = `${comment.text}: ${comment.sentiment}`;
+        commentsList.appendChild(li);
+      });
+    }
+  </script>
+
+</body>
+</html>
